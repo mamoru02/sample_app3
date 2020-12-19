@@ -4,22 +4,24 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     ActionMailer::Base.deliveries.clear
   end
 
+      # 無効なサインアップ情報
   test "invalid signup information" do
     get signup_path
-    assert_no_difference 'User.count' do
+    assert_no_difference 'User.count' do  # User.count == User.count ⇦ post users_path
       post users_path, params: { user: { name:  "",
                                          email: "user@invalid",
                                          password:              "foo",
                                          password_confirmation: "bar" } }
     end
     assert_template 'users/new'
-    assert_select 'div#error_explanation'
-    assert_select 'div.field_with_errors'
+    assert_select 'div#error_explanation' # <div id="error_explanation">foobar</div>
+    assert_select 'div.field_with_errors' # <div class="field_with_errors">foobar</div>
   end
 
+      # アカウントアクティベーションを伴う有効なサインアップ情報
   test "valid signup information with account activation" do
     get signup_path
-    assert_difference 'User.count', 1 do
+    assert_difference 'User.count', 1 do  # User.count + 1 == User.count ⇦ post users_path
       post users_path, params: { user: { name:  "Example User",
                                          email: "user@example.com",
                                          password:              "password",

@@ -1,6 +1,6 @@
 class AccountActivationsController < ApplicationController
 
-  # get /account_activations/:id/edit
+  # get /account_activations/:id/edit/?=email
   def edit
     user = User.find_by(email: params[:email])
     if user && !user.activated? && user.authenticated?(:activation, params[:id])
